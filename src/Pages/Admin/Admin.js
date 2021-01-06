@@ -27,7 +27,7 @@ const Admin = () => {
             </div>
             <div className="col-md-6">
                 {
-                    info.imgUrls && info.imgUrls.map(url => <img height="50" width="50" key={url} src={url}/>)
+                    info.imgUrls && info.imgUrls.map(url => <img alt="img" height="50" width="50" key={url} src={url}/>)
                 }
             </div>
         </div>
