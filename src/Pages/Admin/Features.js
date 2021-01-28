@@ -15,9 +15,9 @@ const Features = ({feature, setFeature}) => {
     return (
         <div className="row">
             <div className="col-md-6">
-                <textarea placeholder="feature1: details; feature2: details" id="feature-input" style={{textAlign: 'justify'}} rows="4" cols="50"/>
+                <textarea className="form-control" placeholder="feature1: details; feature2: details" id="feature-input" style={{textAlign: 'justify'}} rows="4" cols="50"/>
                 <br/>
-                <button onClick={handleView}>View</button>
+                <button className="btn btn-primary w-25" onClick={handleView}>View</button>
             </div>
             <div className="col-md-6 border">
                 {

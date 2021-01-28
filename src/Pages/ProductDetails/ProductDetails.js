@@ -1,23 +1,37 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router';
+import HomeCard from '../Home/HomeCard';
 
 const ProductDetails = () => {
-    const  { title, features, description, productUrl, images } = {
+    const {id} = useParams();
+    const [info, setInfo] = useState({
         title: "Product Title",
         features: {
             name: "Product Name",
-            price: "$80",
+            price: "$...",
             feature: "Product Feature",
         },
         description: "Product Description",
         productUrl: "#",
-        images: [
-            "https://dummyimage.com/600x400/000000/fff",
-            "https://dummyimage.com/600x400/eb330e/fff",
-            "https://dummyimage.com/600x400/0eebbf/fff",
-            "https://dummyimage.com/600x400/660eeb/fff",
-            "https://dummyimage.com/1080x1920/660eeb/fff"
+        imgUrls: [
+            "https://dummyimage.com/600x400/000000/fff&text=Product-Image",
+            "https://dummyimage.com/600x400/eb330e/fff&text=Product-Image",
+            "https://dummyimage.com/600x400/0eebbf/fff&text=Product-Image",
+            "https://dummyimage.com/600x400/660eeb/fff&text=Product-Image",
+            "https://dummyimage.com/1080x1920/660eeb/fff&text=Product-Image"
         ],
-    }
+        relatedProducts: []
+    });
+    
+    useEffect(() =>{
+        fetch("http://localhost:4000/product-details/" + id)
+        .then(response => response.json())
+        .then(data => {
+            setInfo(data);
+        })
+    },[id])
+
+    
 
     // const { title, features, description, productUrl, images } = info;
     const [viewImage, setViewImage] = useState(0);
@@ -27,30 +41,37 @@ const ProductDetails = () => {
             <div className="row">
                 <div className="col-md-6">
                     <div className="image-viewer">
-                        <img src={images[viewImage]} alt="Preview" className="img-fluid"/>
+                        <img src={info.imgUrls[viewImage]} alt="Preview" className="img-fluid"/>
                     </div>
                     <div className="gallery">
                         {
-                            images.map((image, index) => <div onClick={() => setViewImage(index)} className={viewImage === index ? "gallery-image active" : "gallery-image"}>
+                            info.imgUrls.map((image, index) => <div onClick={() => setViewImage(index)} className={viewImage === index ? "gallery-image active" : "gallery-image"}>
                                 <img className="img-fluid" src={image} alt="Gallery"/>
                                 </div>)
                         }
                     </div>
                 </div>
                 <div className="col-md-6 product-info">
-                    <h1>{title}</h1>
+                    <h1>{info.title}</h1>
                     <ul>
                         {
-                            Object.keys(features).map(feature => <li><span>{feature}:</span> {features[feature]}</li>)
+                            Object.keys(info.features).map(feature => <li><span>{feature}:</span> {info.features[feature]}</li>)
                         }
                     </ul>
-                    <a href={productUrl} rel="noreferrer" target="_blank" className="btn btn-success mt-3">Buy from Amazon</a>
+                    <a href={info.productUrl} rel="noreferrer" target="_blank" className="btn btn-success mt-3">Buy Now</a>
                 </div>
             </div>
         </div>
         <div className="description-section">
             <h3>Description</h3>
-            <p>{description}</p>
+            <p>{info.description}</p>
+        </div>
+
+        <h3 className="mt-3">Related Products</h3>
+        <div className="row">
+            {
+                info.relatedProducts.map(product => <HomeCard data={product}/>)
+            }
         </div>
         </>
     );
